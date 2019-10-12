@@ -1,6 +1,7 @@
 #ifndef slang_scanner_h
 #define slang_scanner_h
 
+<<<<<<< HEAD
 typedef enum {
   TOKEN_LEFT_PAREN,
   TOKEN_RIGHT_PAREN,
@@ -58,4 +59,6 @@ typedef struct {
 void initScanner(const char *source);
 Token scanToken();
 
+=======
+>>>>>>> 1cc4611... Reading source code from file + Added compiler frontend structure
 #endif /* slang_scanner_h */

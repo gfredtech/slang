@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include <stdio.h>
 #include <string.h>
 
@@ -19,6 +20,11 @@ void initScanner(const char *source) {
 }
 
 static bool isAtEnd() { return *scanner.current == '\0'; }
+
+static char advance() {
+  scanner.current++;
+  return scanner.current[-1];
+}
 
 static Token makeToken(TokenType type) {
   Token token;
@@ -46,5 +52,35 @@ Token scanToken() {
   if (isAtEnd())
     return makeToken(TOKEN_EOF);
 
+  char c = advance();
+
+  switch (c) {
+  case '(':
+    return makeToken(TOKEN_LEFT_PAREN);
+  case ')':
+    return makeToken(TOKEN_RIGHT_PAREN);
+  case '{':
+    return makeToken(TOKEN_LEFT_BRACE);
+  case '}':
+    return makeToken(TOKEN_RIGHT_BRACE);
+  case ',':
+    return makeToken(TOKEN_COMMA);
+  case ';':
+    return makeToken(TOKEN_SEMICOLON);
+  case '.':
+    return makeToken(TOKEN_DOT);
+  case '-':
+    return makeToken(TOKEN_MINUS);
+  case '+':
+    return makeToken(TOKEN_PLUS);
+  case '/':
+    return makeToken(TOKEN_SLASH);
+  case '*':
+    return makeToken(TOKEN_STAR);
+  }
+
   return errorToken("Unexpected character.");
 }
+=======
+#include "scanner.h"
+>>>>>>> 1cc4611... Reading source code from file + Added compiler frontend structure
