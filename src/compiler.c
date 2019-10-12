@@ -4,7 +4,6 @@
 #include "compiler.h"
 #include "scanner.h"
 
-<<<<<<< HEAD
 void compile(const char *source) {
   initScanner(source);
   int line = -1;
@@ -22,6 +21,3 @@ void compile(const char *source) {
       break;
   }
 }
-=======
-void compile(const char *source) { initScanner(source); }
->>>>>>> 1cc4611... Reading source code from file + Added compiler frontend structure

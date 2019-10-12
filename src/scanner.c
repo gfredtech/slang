@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #include <stdio.h>
 #include <string.h>
 
@@ -81,6 +80,3 @@ Token scanToken() {
 
   return errorToken("Unexpected character.");
 }
-=======
-#include "scanner.h"
->>>>>>> 1cc4611... Reading source code from file + Added compiler frontend structure
