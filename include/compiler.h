@@ -1,6 +1,8 @@
 #ifndef slang_compiler_h
 #define slang_compiler_h
 
-void compile(const char *source);
+#include "vm.h"
+
+bool compile(const char *source, Chunk *chunk);
 
 #endif /* slang_compiler_h */
