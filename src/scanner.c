@@ -34,16 +34,13 @@ static char advance() {
 static char peek() { return *scanner.current; }
 
 static char peekNext() {
-  if (isAtEnd())
-    return '\0';
+  if (isAtEnd()) return '\0';
   return scanner.current[1];
 }
 
 static bool match(char expected) {
-  if (isAtEnd())
-    return false;
-  if (*scanner.current != expected)
-    return false;
+  if (isAtEnd()) return false;
+  if (*scanner.current != expected) return false;
 
   scanner.current++;
   return true;
@@ -86,8 +83,7 @@ static void skipWhitespace() {
     case '/':
       if (peekNext() == '/') {
 
-        while (peek() != '\n' && !isAtEnd())
-          advance();
+        while (peek() != '\n' && !isAtEnd()) advance();
       } else {
         return;
       }
@@ -160,21 +156,18 @@ static TokenType identifierType() {
 }
 
 static Token identifier() {
-  while (isAlpha(peek()) || isDigit(peek()))
-    advance();
+  while (isAlpha(peek()) || isDigit(peek())) advance();
 
   return makeToken(identifierType());
 }
 
 static Token number() {
-  while (isDigit(peek()))
-    advance();
+  while (isDigit(peek())) advance();
 
   if (peek() == '.' && isDigit(peekNext())) {
     advance();
 
-    while (isDigit(peek()))
-      advance();
+    while (isDigit(peek())) advance();
   }
 
   return makeToken(TOKEN_NUMBER);
@@ -182,13 +175,11 @@ static Token number() {
 
 static Token string() {
   while (peek() != '"' && !isAtEnd()) {
-    if (peek() == '\n')
-      scanner.line++;
+    if (peek() == '\n') scanner.line++;
     advance();
   }
 
-  if (isAtEnd())
-    return errorToken("Unterminated string.");
+  if (isAtEnd()) return errorToken("Unterminated string.");
 
   advance();
   return makeToken(TOKEN_STRING);
@@ -198,15 +189,12 @@ Token scanToken() {
   skipWhitespace();
   scanner.start = scanner.current;
 
-  if (isAtEnd())
-    return makeToken(TOKEN_EOF);
+  if (isAtEnd()) return makeToken(TOKEN_EOF);
 
   char c = advance();
 
-  if (isAlpha(c))
-    return identifier();
-  if (isDigit(c))
-    return number();
+  if (isAlpha(c)) return identifier();
+  if (isDigit(c)) return number();
 
   switch (c) {
   case '(':
