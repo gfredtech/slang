@@ -30,11 +30,13 @@ static void runtimeError(const char *format, ...) {
 void initVM() {
   resetStack();
   vm.objects = NULL;
+  initHashTable(&vm.globals);
   initHashTable(&vm.strings);
 }
 
 void freeVM() {
   freeObjects();
+  freeHashTable(&vm.globals);
   freeHashTable(&vm.strings);
 }
 
@@ -71,6 +73,7 @@ static void concatenate() {
 static InterpretResult run() {
 #define READ_BYTE() (*vm.ip++)
 #define READ_CONSTANT() (vm.chunk->constants.values[READ_BYTE()])
+#define READ_STRING() AS_STRING(READ_CONSTANT())
 
 #define BINARY_OP(valueType, op)                                               \
   do {                                                                         \
@@ -114,6 +117,22 @@ static InterpretResult run() {
     case OP_POP:
       pop();
       break;
+    case OP_GET_GLOBAL: {
+      ObjString *name = READ_STRING();
+      Value value;
+      if (!findItem(&vm.globals, name, &value)) {
+        runtimeError("Undefined variable '%s'", name->chars);
+        return INTERPRET_RUNTIME_ERROR;
+      }
+      push(value);
+      break;
+    }
+    case OP_DEFINE_GLOBAL: {
+      ObjString *name = READ_STRING();
+      insertItem(&vm.globals, name, peek(0));
+      pop();
+      break;
+    }
     case OP_EQUAL: {
       Value b = pop();
       Value a = pop();
@@ -173,6 +192,7 @@ static InterpretResult run() {
 
 #undef READ_BYTE
 #undef READ_CONSTANT
+#undef READ_STRING
 #undef BINARY_OP
 }
 
