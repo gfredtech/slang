@@ -21,5 +21,7 @@ bool findItem(HashTable *hashTable, ObjString *key, Value *value);
 bool insertItem(HashTable *hashTable, ObjString *key, Value value);
 bool deleteItem(HashTable *table, ObjString *key);
 void copyTable(HashTable *from, HashTable *to);
+ObjString *tableFindString(HashTable *table, const char *chars, int length,
+                           uint32_t hash);
 
 #endif /* slang_hashtable_h */

@@ -30,9 +30,13 @@ static void runtimeError(const char *format, ...) {
 void initVM() {
   resetStack();
   vm.objects = NULL;
+  initHashTable(&vm.strings);
 }
 
-void freeVM() { freeObjects(); }
+void freeVM() {
+  freeObjects();
+  freeHashTable(&vm.strings);
+}
 
 void push(Value value) {
   *vm.stackTop = value;

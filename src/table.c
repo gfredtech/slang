@@ -109,3 +109,24 @@ void copyTable(HashTable *from, HashTable *to) {
     }
   }
 }
+
+ObjString *tableFindString(HashTable *hashTable, const char *chars, int length,
+                           uint32_t hash) {
+  if (hashTable->count == 0) return NULL;
+
+  uint32_t idx = hash % hashTable->capacity;
+
+  for (;;) {
+    Entry *entry = &hashTable->entries[idx];
+
+    if (entry->key == NULL) {
+      // non-tombstone sentinel found
+      if (IS_NIL(entry->value)) return NULL;
+    } else if (entry->key->length == length && entry->key->hash == hash &&
+               memcmp(entry->key->chars, chars, length) == 0) {
+      return entry->key;
+    }
+
+    idx = (idx + 1) % hashTable->capacity;
+  }
+}
