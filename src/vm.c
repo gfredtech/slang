@@ -30,6 +30,7 @@ static void runtimeError(const char *format, ...) {
 void initVM() {
   resetStack();
   vm.objects = NULL;
+
   initHashTable(&vm.globals);
   initHashTable(&vm.strings);
 }
