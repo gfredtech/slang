@@ -366,10 +366,10 @@ static void forStatement() {
   beginScope();
   consume(TOKEN_LEFT_PAREN, "Expected '(' after 'for'.");
 
-  if (match(TOKEN_VAR)) {
-    varDeclaration();
-  } else if (match(TOKEN_SEMICOLON)) {
+  if (match(TOKEN_SEMICOLON)) {
     // Empty initializer
+  } else if (match(TOKEN_VAR)) {
+    varDeclaration();
   } else {
     expressionStatement();
   }
@@ -544,8 +544,6 @@ static void namedVariable(Token name, bool canAssign) {
   } else {
     emitBytes(getOp, (uint8_t)arg);
   }
-
-  emitBytes(OP_GET_GLOBAL, arg);
 }
 
 static void variable(bool canAssign) {
@@ -592,7 +590,7 @@ ParseRule rules[] = {
     {variable, NULL, PREC_NONE},     // TOKEN_IDENTIFIER
     {string, NULL, PREC_NONE},       // TOKEN_STRING
     {number, NULL, PREC_NONE},       // TOKEN_NUMBER
-    {NULL, and_, PREC_NONE},         // TOKEN_AND
+    {NULL, and_, PREC_AND},          // TOKEN_AND
     {NULL, NULL, PREC_NONE},         // TOKEN_CLASS
     {NULL, NULL, PREC_NONE},         // TOKEN_ELSE
     {literal, NULL, PREC_NONE},      // TOKEN_FALSE
@@ -600,7 +598,7 @@ ParseRule rules[] = {
     {NULL, NULL, PREC_NONE},         // TOKEN_FUN
     {NULL, NULL, PREC_NONE},         // TOKEN_IF
     {literal, NULL, PREC_NONE},      // TOKEN_NIL
-    {NULL, or_, PREC_NONE},          // TOKEN_OR
+    {NULL, or_, PREC_OR},            // TOKEN_OR
     {NULL, NULL, PREC_NONE},         // TOKEN_PRINT
     {NULL, NULL, PREC_NONE},         // TOKEN_RETURN
     {NULL, NULL, PREC_NONE},         // TOKEN_SUPER
@@ -650,6 +648,7 @@ bool compile(const char *source, Chunk *chunk) {
   while (!match(TOKEN_EOF)) {
     declaration();
   }
+
   endCompiler();
   return !parser.hadError;
 }
